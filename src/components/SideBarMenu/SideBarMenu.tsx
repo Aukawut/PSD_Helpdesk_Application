@@ -19,6 +19,14 @@ import { Outlet, useLocation } from "react-router-dom"
 import { menuLists } from "./utils"
 import logoProspira from "../../assets/images/Prospira_logos.png"
 
+import Menu from "@mui/material/Menu"
+import Container from "@mui/material/Container"
+import Avatar from "@mui/material/Avatar"
+import Tooltip from "@mui/material/Tooltip"
+import MenuItem from "@mui/material/MenuItem"
+
+const settings = ["Profile", "Account", "Dashboard", "Logout"]
+
 const drawerWidth = 240
 
 interface Props {
@@ -30,6 +38,16 @@ export default function SideBarMenu(props: Props) {
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const [isClosing, setIsClosing] = React.useState(false)
   const location = useLocation()
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null
+  )
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget)
+  }
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null)
+  }
 
   const handleDrawerClose = () => {
     setIsClosing(true)
@@ -64,7 +82,7 @@ export default function SideBarMenu(props: Props) {
 
       <List>
         {menuLists.map((menu, index) => (
-          <ListItem key={menu.id} disablePadding sx={{marginBottom:1}}>
+          <ListItem key={menu.id} disablePadding sx={{ marginBottom: 1 }}>
             <ListItemButton
               sx={{
                 bgcolor: menu.path === location.pathname ? activeColor : "",
@@ -93,7 +111,7 @@ export default function SideBarMenu(props: Props) {
     window !== undefined ? () => window().document.body : undefined
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", background: "#F5F9FC" }}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -112,9 +130,47 @@ export default function SideBarMenu(props: Props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            PSD Helpdesk | PSTH
-          </Typography>
+          <Container maxWidth="xl">
+            <Toolbar disableGutters>
+              <Box sx={{ flexGrow: 1 }}>
+                <Typography sx={{ fontSize: { xs: 16, sm: 20 } }}>
+                  PSD Helpdesk System
+                </Typography>
+              </Box>
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="/static/images/avatar/2.jpg"
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center">{setting}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+            </Toolbar>
+          </Container>
         </Toolbar>
       </AppBar>
       <Box
@@ -138,9 +194,7 @@ export default function SideBarMenu(props: Props) {
               boxSizing: "border-box",
               width: drawerWidth,
             },
-            
           }}
-          
         >
           {drawer}
         </Drawer>

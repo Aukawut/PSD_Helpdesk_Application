@@ -23,4 +23,10 @@ export const menuLists: menuList[] = [
     path: "/report",
     icon: "",
   },
+  {
+    id: 4,
+    name: "Tickets",
+    path: "/tickets",
+    icon: "",
+  },
 ]

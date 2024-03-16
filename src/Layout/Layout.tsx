@@ -1,12 +1,10 @@
-import { Outlet } from "react-router-dom"
-
 import SideBarMenu from "../components/SideBarMenu/SideBarMenu"
 
 function Layout() {
   return (
     <div>
         <SideBarMenu />
-        <Outlet />
+        {/* <Outlet /> */}
     </div>
   )
 }
