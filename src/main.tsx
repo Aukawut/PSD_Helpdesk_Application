@@ -1,10 +1,11 @@
 import ReactDOM from "react-dom/client"
 import App from "./App.tsx"
 import "./index.css"
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from "@mui/material/styles"
 
 const defaultTheme = createTheme({
   components: {
+ 
     MuiCard: {
       styleOverrides: {
         root: {
@@ -13,17 +14,18 @@ const defaultTheme = createTheme({
         },
       },
     },
+   
     MuiTableCell: {
       styleOverrides: {
         head: {
           backgroundColor: "#F5F9FC",
-          borderBottom:'2px solid black',
-          textAlign:'center'
+          borderBottom: "2px solid black",
+          textAlign: "center",
         },
-        body:{
-          padding:'0.5em',
-          textAlign:'center'
-        }
+        body: {
+          padding: "0.5em",
+          textAlign: "center",
+        },
       },
     },
   },

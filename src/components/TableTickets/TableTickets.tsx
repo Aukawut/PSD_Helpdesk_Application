@@ -95,9 +95,10 @@ const TableTickets: FC<TableProps> = ({ data }) => {
       <div className="m-2">
       <TextField
         type="text"
+        variant="filled"
         value={searchTerm}
+        label="Search"
         onChange={handleSearch}
-        placeholder="Search..."
         size="small"
       />
       </div>

@@ -43,7 +43,8 @@ export default function SideBarMenu(props: Props) {
     setIsClosing(false)
   }
 
-  const activeColor: string = "#787fff"
+  const activeColor: string = "#7352C7"
+  const bgMenu:string = "#EAE6F7";
 
   const drawer = (
     <div className="pr-2">
@@ -66,17 +67,18 @@ export default function SideBarMenu(props: Props) {
             <ListItem disablePadding sx={{ marginBottom: 1 }}>
               <ListItemButton
                 sx={{
-                  bgcolor: menu.path === location.pathname ? activeColor : "",
-                  color: menu.path === location.pathname ? "#fff" : "",
+                  bgcolor: menu.path === location.pathname ? bgMenu : "",
+                  color: menu.path === location.pathname ? "#7352C7" : "",
                   borderTopRightRadius: 25,
                   borderBottomRightRadius: 25,
+                  borderLeft: menu.path === location.pathname ? `0.3rem solid ${activeColor}`:'',
                   "&:hover": {
-                    bgcolor: activeColor,
+                    bgcolor: bgMenu,
                   },
                 }}
               >
                 <ListItemIcon
-                  sx={{ color: menu.path === location.pathname ? "#fff" : "" }}
+                  sx={{ color: menu.path === location.pathname ? "#7352C7" : "" }}
                 >
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
