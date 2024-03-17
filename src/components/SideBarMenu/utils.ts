@@ -1,3 +1,7 @@
+import { IconTypeMap } from '@mui/material';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+type MenuSettingIcon = OverridableComponent<IconTypeMap<unknown, 'svg'>>;
 interface menuList {
   id: number
   name: string
@@ -7,7 +11,8 @@ interface menuList {
 interface MenuSetting {
   id: number
   nameMenu: string
-  path: string
+  path: string,
+  icon: MenuSettingIcon;
 }
 export const menuLists: menuList[] = [
   {
@@ -40,20 +45,24 @@ export const settings: MenuSetting[] = [
     id: 1,
     nameMenu: "Profile",
     path: "/profile",
+    icon:AccountBoxIcon
   },
   {
     id: 2,
     nameMenu: "Account",
     path: "/account",
+    icon:AccountBoxIcon
   },
   {
     id: 3,
     nameMenu: "Dashboard",
     path: "/dashboard",
+    icon:AccountBoxIcon
   },
   {
     id: 4,
     nameMenu: "Logout",
     path: "/logout",
+    icon:AccountBoxIcon
   },
 ]

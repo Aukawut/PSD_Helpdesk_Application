@@ -1,6 +1,6 @@
 import * as React from "react"
-import Box from "@mui/material/Box"
 import CssBaseline from "@mui/material/CssBaseline"
+import Box from "@mui/material/Box"
 import Divider from "@mui/material/Divider"
 import Drawer from "@mui/material/Drawer"
 import InboxIcon from "@mui/icons-material/MoveToInbox"
@@ -34,7 +34,11 @@ export default function SideBarMenu(props: Props) {
     setIsClosing(true)
     setMobileOpen(false)
   }
-
+  const handleDrawerToggle = () => {
+    if (!isClosing) {
+      setMobileOpen(!mobileOpen)
+    }
+  }
   const handleDrawerTransitionEnd = () => {
     setIsClosing(false)
   }
@@ -95,6 +99,7 @@ export default function SideBarMenu(props: Props) {
         drawerWidth={drawerWidth}
         settings={settings}
         isClosing={isClosing}
+        handleDrawerToggle={handleDrawerToggle}
       />
       <CssBaseline />
       <Box
