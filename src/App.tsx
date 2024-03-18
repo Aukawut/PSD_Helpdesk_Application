@@ -4,6 +4,7 @@ import Overview from "./pages/Overview/Overview"
 import Login from "./pages/Login/Login"
 import TicketsPage from "./pages/Ticketspage/TicketsPage"
 import "./App.css"
+import NotFound from "./pages/NotFound/NotFound"
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
           <Route element={<TicketsPage />} path="/tickets"></Route>
         </Route>
         <Route path="/login" element={<Login />}></Route>
-        <Route path="*" element={<Login />}></Route>
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </Router>
   )

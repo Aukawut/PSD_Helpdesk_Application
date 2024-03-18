@@ -1,50 +1,47 @@
-import * as React from "react"
-import CssBaseline from "@mui/material/CssBaseline"
-import Box from "@mui/material/Box"
-import Divider from "@mui/material/Divider"
-import Drawer from "@mui/material/Drawer"
-import InboxIcon from "@mui/icons-material/MoveToInbox"
-import List from "@mui/material/List"
-import ListItem from "@mui/material/ListItem"
-import ListItemButton from "@mui/material/ListItemButton"
-import ListItemIcon from "@mui/material/ListItemIcon"
-import ListItemText from "@mui/material/ListItemText"
-import MailIcon from "@mui/icons-material/Mail"
-import Toolbar from "@mui/material/Toolbar"
-import { Outlet, useLocation } from "react-router-dom"
-import { menuLists, settings } from "./utils"
-import logoProspira from "../../assets/images/Prospira_logos.png"
+import * as React from "react";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Toolbar from "@mui/material/Toolbar";
+import { Outlet, useLocation } from "react-router-dom";
+import { menuLists, settings } from "./utils";
+import logoProspira from "../../assets/images/Prospira_logos.png";
 
+import { Link } from "react-router-dom";
+import HeaderBar from "../HeaderBar/HeaderBar";
 
-import { Link } from "react-router-dom"
-import HeaderBar from "../HeaderBar/HeaderBar"
-
-const drawerWidth = 240
+const drawerWidth = 240;
 
 interface Props {
-  window?: () => Window
+  window?: () => Window;
 }
 
 export default function SideBarMenu(props: Props) {
-  const { window } = props
-  const [mobileOpen, setMobileOpen] = React.useState(false)
-  const [isClosing, setIsClosing] = React.useState(false)
-  const location = useLocation()
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [isClosing, setIsClosing] = React.useState(false);
+  const location = useLocation();
   const handleDrawerClose = () => {
-    setIsClosing(true)
-    setMobileOpen(false)
-  }
+    setIsClosing(true);
+    setMobileOpen(false);
+  };
   const handleDrawerToggle = () => {
     if (!isClosing) {
-      setMobileOpen(!mobileOpen)
+      setMobileOpen(!mobileOpen);
     }
-  }
+  };
   const handleDrawerTransitionEnd = () => {
-    setIsClosing(false)
-  }
+    setIsClosing(false);
+  };
 
-  const activeColor: string = "#7352C7"
-  const bgMenu:string = "#EAE6F7";
+  const activeColor: string = "#7352C7";
+  const bgMenu: string = "#EAE6F7";
 
   const drawer = (
     <div className="pr-2">
@@ -62,7 +59,7 @@ export default function SideBarMenu(props: Props) {
       <Divider />
 
       <List>
-        {menuLists.map((menu, index) => (
+        {menuLists.map((menu, _) => (
           <Link key={menu.id} to={menu.path}>
             <ListItem disablePadding sx={{ marginBottom: 1 }}>
               <ListItemButton
@@ -71,16 +68,21 @@ export default function SideBarMenu(props: Props) {
                   color: menu.path === location.pathname ? "#7352C7" : "",
                   borderTopRightRadius: 25,
                   borderBottomRightRadius: 25,
-                  borderLeft: menu.path === location.pathname ? `0.3rem solid ${activeColor}`:'',
+                  borderLeft:
+                    menu.path === location.pathname
+                      ? `0.3rem solid ${activeColor}`
+                      : "",
                   "&:hover": {
                     bgcolor: bgMenu,
                   },
                 }}
               >
                 <ListItemIcon
-                  sx={{ color: menu.path === location.pathname ? "#7352C7" : "" }}
+                  sx={{
+                    color: menu.path === location.pathname ? "#7352C7" : "",
+                  }}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  <menu.icon />
                 </ListItemIcon>
                 <ListItemText primary={menu.name} />
               </ListItemButton>
@@ -89,14 +91,13 @@ export default function SideBarMenu(props: Props) {
         ))}
       </List>
     </div>
-  )
+  );
 
   const container =
-    window !== undefined ? () => window().document.body : undefined
+    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Box sx={{ display: "flex", background: "#F5F9FC", height: "100vh" }}>
-      
       <HeaderBar
         drawerWidth={drawerWidth}
         settings={settings}
@@ -155,5 +156,5 @@ export default function SideBarMenu(props: Props) {
         <Outlet />
       </Box>
     </Box>
-  )
+  );
 }
