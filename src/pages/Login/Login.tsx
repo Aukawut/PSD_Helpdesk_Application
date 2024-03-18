@@ -119,7 +119,7 @@ const Login = () => {
                 sx={{ color: grey[700] }}
                 fontSize={14}
               >
-                Welcome by please enter your details.
+                Welcome back please enter your details.
               </Typography>
               <div className="mt-[1rem]">
                 <form onSubmit={handleLogin}>
@@ -179,11 +179,10 @@ const Login = () => {
             </div>
           </div>
         </div>
-        <div className="bg-[#E1E2E6]">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto
-          corrupti temporibus numquam sequi consequuntur expedita, aliquid
-          provident, at impedit non tempore cupiditate soluta? Quidem fuga
-          obcaecati fugiat. Possimus, tempora eaque!
+        <div className="hidden sm:flex relative bg-[#E1E2E6] h-full justify-center items-center">
+        <div className="w-60 h-60 bg-gradient-to-tr from-violet-500 to-pink-500 rounded-full animate-spin" />
+                      <div className="w-full h-1/2 absolute bottom-0 bg-white/10 backdrop-blur-lg"/>
+        
         </div>
       </div>
     </div>

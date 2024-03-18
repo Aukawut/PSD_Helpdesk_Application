@@ -84,6 +84,7 @@ const HeaderBar: FC<HeaderBarProps> = ({
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
+          boxShadow:'rgba(0, 0, 0, 0.1) 0px 4px 12px'
         }}
       >
         <Toolbar>
@@ -112,7 +113,7 @@ const HeaderBar: FC<HeaderBarProps> = ({
                       variant="dot"
                     >
                       <Avatar
-                        alt="Remy Sharp"
+                        alt="Aemy Sharp"
                         src="/static/images/avatar/1.jpg"
                       />
                     </StyledBadge>
