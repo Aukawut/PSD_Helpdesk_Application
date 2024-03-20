@@ -1,24 +1,21 @@
-import { FC } from "react"
-import { grey } from "@mui/material/colors"
-import { Box, Typography } from "@mui/material"
-import { OverridableComponent } from "@mui/material/OverridableComponent"
-import { IconTypeMap } from "@mui/material"
-import "./CardJobCount.css"
-import CounterAnimate from "../CounterAnimate/CounterAnimate"
+import { FC, useEffect } from "react";
+import { grey } from "@mui/material/colors";
+import { Box, Typography } from "@mui/material";
+import "./CardJobCount.css";
+import CounterAnimate from "../CounterAnimate/CounterAnimate";
 
-type MenuSettingIcon = OverridableComponent<IconTypeMap<unknown, "svg">>
+import { iconJobStatus } from "../../pages/Overview/utils";
 
 interface JobCount {
-  id: number
-  status: string
-  amount: number
-  iconBgColor: string
-  textInsideBox: string
-  icon: MenuSettingIcon
+  id: number;
+  status: string;
+  amount: number;
+  iconBgColor: string;
+  textInsideBox: string;
 }
 
 interface propsJobCount {
-  data: JobCount
+  data: JobCount;
 }
 
 const CardJobCount: FC<propsJobCount> = ({ data }) => {
@@ -30,7 +27,17 @@ const CardJobCount: FC<propsJobCount> = ({ data }) => {
     "&:hover": {
       boxShadow: "rgba(183, 194, 203, 0.7) 0px 2px 8px 0px",
     },
-  }
+  };
+
+  const getIcon = (id: number, textColor: string) => {
+    const obj = iconJobStatus.find((x) => x.id === id);
+    if (obj !== undefined) {
+      return <obj.icon sx={{ color: textColor }} />;
+    } else {
+      return "Loading..";
+    }
+  };
+  useEffect(() => {}, [data]);
   return (
     <Box sx={{ ...cardStyle }}>
       <Box className="flex justify-between">
@@ -39,28 +46,19 @@ const CardJobCount: FC<propsJobCount> = ({ data }) => {
             {data.status}
           </Typography>
           <Typography fontWeight={700} fontSize={30} color={grey[800]}>
-            <CounterAnimate data={data}   />
+            <CounterAnimate data={data} />
           </Typography>
         </Box>
         <Box>
           <div
-            className={`w-[5rem] h-[5rem] ${data.iconBgColor} rounded-full flex justify-center items-center`}
+            className={`w-[5rem] h-[5rem] rounded-full flex justify-center items-center ${data.iconBgColor}`}
           >
-            {
-              <data.icon
-                sx={{
-                  marginRight: 1,
-                  color: data.textInsideBox,
-                  fontSize: "2rem",
-                }}
-                className={`svgIcon`}
-              />
-            }
+            {getIcon(data.id, data.textInsideBox)}
           </div>
         </Box>
       </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default CardJobCount
+export default CardJobCount;

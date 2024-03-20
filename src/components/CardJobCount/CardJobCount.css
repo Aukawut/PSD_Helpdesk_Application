@@ -1,4 +1,18 @@
-.svgIcon{
-    padding: 0 !important;
-    margin: 0 !important;
+.NewJobs {
+  background: #ff579a !important ;
+}
+.AcceptJobs {
+  background: #5c60f5 !important ;
+}
+.FinishJobs {
+  background: #36a2eb !important ;
+}
+.OutsideJobs {
+  background: #ff8c00 !important ;
+}
+.ImproveJobs {
+  background: #4bc0c0 !important ;
+}
+.Closejobs {
+  background: #c9cdcf !important ;
 }

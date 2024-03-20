@@ -1,51 +1,54 @@
-import * as React from "react"
-import CssBaseline from "@mui/material/CssBaseline"
-import Box from "@mui/material/Box"
-import Divider from "@mui/material/Divider"
-import Drawer from "@mui/material/Drawer"
-import List from "@mui/material/List"
-import ListItem from "@mui/material/ListItem"
-import ListItemButton from "@mui/material/ListItemButton"
-import ListItemIcon from "@mui/material/ListItemIcon"
-import ListItemText from "@mui/material/ListItemText"
-import Toolbar from "@mui/material/Toolbar"
-import { Outlet, useLocation } from "react-router-dom"
-import { menuLists, settings } from "./utils"
-import logoProspira from "../../assets/images/Prospira_logos.png"
-import { styled } from "@mui/material/styles"
-import Badge from "@mui/material/Badge"
+import * as React from "react";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Toolbar from "@mui/material/Toolbar";
+import { Outlet, useLocation } from "react-router-dom";
+import { menuLists, settings } from "./utils";
+import logoProspira from "../../assets/images/Prospira_logos.png";
+import { styled } from "@mui/material/styles";
+import Badge from "@mui/material/Badge";
 
-import { Link } from "react-router-dom"
-import HeaderBar from "../HeaderBar/HeaderBar"
-import { Avatar, Typography } from "@mui/material"
-import { grey } from "@mui/material/colors"
+import { Link } from "react-router-dom";
+import HeaderBar from "../HeaderBar/HeaderBar";
+import { Avatar, Typography } from "@mui/material";
+import { grey } from "@mui/material/colors";
+import { usePSDHelpdeskStore } from "../../store";
 
-const drawerWidth = 240
+const drawerWidth = 240;
 
 interface Props {
-  window?: () => Window
+  window?: () => Window;
 }
 
 export default function SideBarMenu(props: Props) {
-  const { window } = props
-  const [mobileOpen, setMobileOpen] = React.useState(false)
-  const [isClosing, setIsClosing] = React.useState(false)
-  const location = useLocation()
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [isClosing, setIsClosing] = React.useState(false);
+  const infoUser = usePSDHelpdeskStore((state) => state.info);
+
+  const location = useLocation();
   const handleDrawerClose = () => {
-    setIsClosing(true)
-    setMobileOpen(false)
-  }
+    setIsClosing(true);
+    setMobileOpen(false);
+  };
   const handleDrawerToggle = () => {
     if (!isClosing) {
-      setMobileOpen(!mobileOpen)
+      setMobileOpen(!mobileOpen);
     }
-  }
+  };
   const handleDrawerTransitionEnd = () => {
-    setIsClosing(false)
-  }
+    setIsClosing(false);
+  };
 
-  const activeColor: string = "#7352C7"
-  const bgMenu: string = "#EAE6F7"
+  const activeColor: string = "#7352C7";
+  const bgMenu: string = "#EAE6F7";
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
       backgroundColor: "#44b700",
@@ -74,7 +77,7 @@ export default function SideBarMenu(props: Props) {
         opacity: 0,
       },
     },
-  }))
+  }));
   const drawer = (
     <div>
       <div className="p-2.5">
@@ -101,10 +104,16 @@ export default function SideBarMenu(props: Props) {
             </StyledBadge>
             <Box>
               <Typography fontSize={14} fontWeight={600} color={grey[800]}>
-                Akawut Kamesuwan
+                {infoUser?.ldap_info.LDAP_DisplayName}
               </Typography>
-              <Typography fontSize={12} fontWeight={600} color={grey[700]} variant="caption">
-                IT Engineer 1
+              <Typography
+                fontSize={11}
+                fontWeight={600}
+                color={grey[700]}
+                variant="caption"
+              >
+                {infoUser?.hrc_info.UHR_POSITION} (
+                {infoUser?.hrc_info.ESD_ShortDepartment})
               </Typography>
             </Box>
           </Box>
@@ -145,10 +154,10 @@ export default function SideBarMenu(props: Props) {
         ))}
       </List>
     </div>
-  )
+  );
 
   const container =
-    window !== undefined ? () => window().document.body : undefined
+    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Box sx={{ display: "flex", background: "#F5F9FC", height: "100vh" }}>
@@ -210,5 +219,5 @@ export default function SideBarMenu(props: Props) {
         <Outlet />
       </Box>
     </Box>
-  )
+  );
 }

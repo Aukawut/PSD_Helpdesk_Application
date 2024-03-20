@@ -13,7 +13,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { usePSDHelpdeskStore } from "../../store";
+
 type NavigateFunction = (path: string) => void;
+
 const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
@@ -22,6 +25,9 @@ const Login = () => {
   const inputUsernameRef = useRef<HTMLInputElement>(null);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const navigate: NavigateFunction = useNavigate();
+  const login = usePSDHelpdeskStore((state) => state.login);
+  const setToken = usePSDHelpdeskStore((state) => state.setToken);
+  const setInfo = usePSDHelpdeskStore((state) => state.setInfo);
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -83,7 +89,15 @@ const Login = () => {
       )
       .then((res) => {
         if (!res.data.err && res.data.status === "Ok") {
-          notifySuccess();
+          // ส่ง Object LDAP_INFO ไปที่ Function Store
+          setInfo(
+            res.data.infomationLdap.LDAP_INFO,
+            res.data.infomationLdap.HRC_Info
+          );
+          setToken(res.data.token); // Set Token บน Local Storage
+          login(); // Set status Login บน Local Storage
+          notifySuccess(); // Show Alert
+          console.log(res.data);
         } else {
           notifyError(res.data.msg);
         }
@@ -180,9 +194,8 @@ const Login = () => {
           </div>
         </div>
         <div className="hidden sm:flex relative bg-[#E1E2E6] h-full justify-center items-center">
-        <div className="w-60 h-60 bg-gradient-to-tr from-violet-500 to-pink-500 rounded-full animate-spin" />
-                      <div className="w-full h-1/2 absolute bottom-0 bg-white/10 backdrop-blur-lg"/>
-        
+          <div className="w-60 h-60 bg-gradient-to-tr from-violet-500 to-pink-500 rounded-full animate-spin" />
+          <div className="w-full h-1/2 absolute bottom-0 bg-white/10 backdrop-blur-lg" />
         </div>
       </div>
     </div>
