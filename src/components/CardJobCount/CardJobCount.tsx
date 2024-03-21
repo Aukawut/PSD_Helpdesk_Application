@@ -25,15 +25,17 @@ const CardJobCount: FC<propsJobCount> = ({ data }) => {
     padding: 3,
     background:'#fff',
     cursor: "pointer",
+    transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
     "&:hover": {
       boxShadow: "rgba(183, 194, 203, 0.7) 0px 2px 8px 0px",
+      transform: "translateY(-2%)"
     },
   };
 
   const getIcon = (id: number, textColor: string) => {
     const obj = iconJobStatus.find((x) => x.id === id);
     if (obj !== undefined) {
-      return <obj.icon sx={{ color: textColor }} />;
+      return <obj.icon sx={{ color: textColor,fontSize:32 }} />;
     } else {
       return "Loading..";
     }
