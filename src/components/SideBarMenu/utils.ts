@@ -29,7 +29,7 @@ export const menuLists: menuList[] = [
   {
     id: 2,
     name: "Job Request",
-    path: "/job/request",
+    path: "/request",
     icon: HandymanIcon,
   },
   {

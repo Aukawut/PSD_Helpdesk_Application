@@ -8,7 +8,7 @@ interface propsJobCount {
 const CounterAnimate: FC<propsJobCount> = ({ data }) => {
   return (
     <div>
-      <CountUp start={0} end={data.amount} duration={1.4} useEasing={true} />
+      <CountUp start={0} end={data.amount} duration={0.5} useEasing={true} />
     </div>
   );
 };

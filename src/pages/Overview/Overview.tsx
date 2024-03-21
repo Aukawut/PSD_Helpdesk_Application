@@ -5,7 +5,8 @@ import axios from "axios";
 import { usePSDHelpdeskStore } from "../../store";
 import "react-toastify/dist/ReactToastify.css";
 import { JobCount } from "./utils";
-import DonutChartJobFactory from "../../components/DonutChartJobFactory/DonutChartJobFactory";
+import PushPinRoundedIcon from "@mui/icons-material/PushPinRounded";
+import { red } from "@mui/material/colors";
 
 function Overview() {
   const [jobsCount, setJobsCount] = useState<JobCount[]>();
@@ -37,20 +38,9 @@ function Overview() {
   }, []);
   return (
     <div>
-      <Typography variant="h6" fontSize={21} marginBottom={2} fontWeight={600}>
-        Dashboard
+      <Typography fontSize={18} marginBottom={2} fontWeight={600}>
+        <PushPinRoundedIcon sx={{ color: red[500] }} /> Overview
       </Typography>
-      <div className="grid grid-cols-12 gap-2">
-        <div className="col-span-7">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde a
-          recusandae tenetur quibusdam magnam sapiente repudiandae quo omnis
-          tempora atque ex aliquam dolore blanditiis, nam expedita dolorem quas,
-          vitae aliquid!
-        </div>
-        <div className="col-span-5">
-          <DonutChartJobFactory />
-        </div>
-      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
         {jobsCount?.map((job, index: number) => (
           <CardJobCount data={job} key={index} />

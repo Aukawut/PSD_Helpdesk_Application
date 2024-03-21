@@ -61,16 +61,17 @@ const DonutChartJobFactory: React.FC = () => {
           "rgba(255, 159, 64, 1)",
         ],
         borderRadius: 10,
-
         borderWidth: 1,
       },
     ],
+
+   
   };
   return (
     <Box className="p-[1rem] flex justify-center" sx={{ ...cardStyle }}>
       {jobs && jobs.length > 0 ? (
-        <div className="w-[300px] mb-2">
-          <Doughnut data={data} />
+        <div className="w-[250px] mb-2">
+          <Doughnut data={data} options={{cutout:'70%'}}/>
         </div>
       ) : (
         <Box>Loading...</Box>

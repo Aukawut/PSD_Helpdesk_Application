@@ -28,6 +28,7 @@ const Login = () => {
   const login = usePSDHelpdeskStore((state) => state.login);
   const setToken = usePSDHelpdeskStore((state) => state.setToken);
   const setInfo = usePSDHelpdeskStore((state) => state.setInfo);
+  const logout = usePSDHelpdeskStore((state) => state.logout);
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -110,6 +111,7 @@ const Login = () => {
     if (inputUsernameRef.current) {
       inputUsernameRef.current.focus();
     }
+    logout();
   }, []);
   return (
     <div className="bg-gray-100 h-[100vh]">

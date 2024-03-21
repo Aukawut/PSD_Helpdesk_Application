@@ -5,6 +5,7 @@ import Login from "./pages/Login/Login"
 import TicketsPage from "./pages/Ticketspage/TicketsPage"
 import "./App.css"
 import NotFound from "./pages/NotFound/NotFound"
+import RequestJob from "./pages/RequestJob/RequestJob"
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route element={<Layout />}>
           <Route element={<Overview />} path="/"></Route>
           <Route element={<TicketsPage />} path="/tickets"></Route>
+          <Route element={<RequestJob />} path="/request"></Route>
         </Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="*" element={<NotFound />}></Route>

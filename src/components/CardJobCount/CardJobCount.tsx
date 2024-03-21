@@ -23,6 +23,7 @@ const CardJobCount: FC<propsJobCount> = ({ data }) => {
     boxShadow: "rgba(183, 194, 203, 0.6) 0px 1px 8px 0px",
     borderRadius: 3,
     padding: 3,
+    background:'#fff',
     cursor: "pointer",
     "&:hover": {
       boxShadow: "rgba(183, 194, 203, 0.7) 0px 2px 8px 0px",

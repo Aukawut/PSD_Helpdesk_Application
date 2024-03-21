@@ -36,7 +36,26 @@ export const usePSDHelpdeskStore = create<PSDHelpdeskStore>()(
         token: "",
         isLogin: false,
         logout: () => {
-          set((state) => ({ isLogin: (state.isLogin = false) }));
+          set((state) => ({
+            isLogin: (state.isLogin = false),
+            token: (state.token = ""),
+            info: (state.info = {
+              ldap_info: {
+                LDAP_samaccountname: "",
+                LDAP_DisplayName: "",
+                LDAP_Description: "",
+                LDAP_Department: "",
+                LDAP_InternetAddress: "",
+              },
+              hrc_info: {
+                ROLE: "",
+                UHR_EmpCode: "",
+                UHR_FullName_th: "",
+                ESD_ShortDepartment: "",
+                UHR_POSITION: "",
+              },
+            }),
+          }));
         },
         login: () => {
           set((state) => ({ isLogin: (state.isLogin = true) }));
@@ -59,10 +78,10 @@ export const usePSDHelpdeskStore = create<PSDHelpdeskStore>()(
         },
         setInfo: (ldap_info: ldapInfo, infoHr: infoHRC) =>
           set((state) => ({
-            info: state.info = {
+            info: (state.info = {
               ldap_info: ldap_info,
-              hrc_info: infoHr
-            },
+              hrc_info: infoHr,
+            }),
           })),
         setToken: (token) => set((state) => ({ token: (state.token = token) })),
       }),
