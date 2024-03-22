@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client"
 import App from "./App.tsx"
 import "./index.css"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
+import { green } from "@mui/material/colors"
 
 const defaultTheme = createTheme({
   components: {
@@ -45,6 +46,9 @@ const defaultTheme = createTheme({
       dark: "#ba000d",
       contrastText: "#000",
     },
+    success:{
+      main:green[400]
+    }
   },
 })
 

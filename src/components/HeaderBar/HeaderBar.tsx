@@ -1,36 +1,36 @@
-import React from "react"
-import AppBar from "@mui/material/AppBar"
-import CssBaseline from "@mui/material/CssBaseline"
-import Box from "@mui/material/Box"
-import IconButton from "@mui/material/IconButton"
-import MenuIcon from "@mui/icons-material/Menu"
-import Tooltip from "@mui/material/Tooltip"
-import Menu from "@mui/material/Menu"
-import Container from "@mui/material/Container"
-import Avatar from "@mui/material/Avatar"
-import Toolbar from "@mui/material/Toolbar"
-import Typography from "@mui/material/Typography"
-import MenuItem from "@mui/material/MenuItem"
-import { styled } from "@mui/material/styles"
-import Badge from "@mui/material/Badge"
-import { IconTypeMap } from "@mui/material"
-import { OverridableComponent } from "@mui/material/OverridableComponent"
-import { FC } from "react"
-import {grey} from '@mui/material/colors'
+import React from "react";
+import AppBar from "@mui/material/AppBar";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import Tooltip from "@mui/material/Tooltip";
+import Menu from "@mui/material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import MenuItem from "@mui/material/MenuItem";
+import { styled } from "@mui/material/styles";
+import Badge from "@mui/material/Badge";
+import { IconTypeMap } from "@mui/material";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { FC } from "react";
+import { grey } from "@mui/material/colors";
 
-type MenuSettingIcon = OverridableComponent<IconTypeMap<unknown, 'svg'>>;
+type MenuSettingIcon = OverridableComponent<IconTypeMap<unknown, "svg">>;
 
 interface MenuSetting {
-  id: number
-  nameMenu: string
-  path: string,
-  icon:MenuSettingIcon
+  id: number;
+  nameMenu: string;
+  path: string;
+  icon: MenuSettingIcon;
 }
 interface HeaderBarProps {
-  drawerWidth: number
-  settings: MenuSetting[]
-  isClosing: boolean
-  handleDrawerToggle: () => void
+  drawerWidth: number;
+  settings: MenuSetting[];
+  isClosing: boolean;
+  handleDrawerToggle: () => void;
 }
 
 const HeaderBar: FC<HeaderBarProps> = ({
@@ -40,14 +40,14 @@ const HeaderBar: FC<HeaderBarProps> = ({
 }) => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
-  )
+  );
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget)
-  }
+    setAnchorElUser(event.currentTarget);
+  };
 
   const handleCloseUserMenu = () => {
-    setAnchorElUser(null)
-  }
+    setAnchorElUser(null);
+  };
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
       backgroundColor: "#44b700",
@@ -75,7 +75,7 @@ const HeaderBar: FC<HeaderBarProps> = ({
         opacity: 0,
       },
     },
-  }))
+  }));
   return (
     <div>
       <CssBaseline />
@@ -84,7 +84,7 @@ const HeaderBar: FC<HeaderBarProps> = ({
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          boxShadow:'rgba(0, 0, 0, 0.1) 0px 4px 12px'
+          boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
         }}
       >
         <Toolbar>
@@ -133,35 +133,39 @@ const HeaderBar: FC<HeaderBarProps> = ({
                   PaperProps={{
                     elevation: 0,
                     sx: {
-                      overflow: 'visible',
-                      filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.14))',
+                      overflow: "visible",
+                      filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.14))",
                       mt: 1.2,
-                      '& .MuiAvatar-root': {
+                      "& .MuiAvatar-root": {
                         width: 32,
                         height: 32,
                         ml: -0.5,
                         mr: 1,
                       },
-                      '&::before': {
+                      "&::before": {
                         content: '""',
-                        display: 'block',
-                        position: 'absolute',
+                        display: "block",
+                        position: "absolute",
                         top: 0,
                         right: 14,
                         width: 10,
                         height: 10,
-                        bgcolor: 'background.paper',
-                        transform: 'translateY(-50%) rotate(45deg)',
+                        bgcolor: "background.paper",
+                        transform: "translateY(-50%) rotate(45deg)",
                         zIndex: 0,
                       },
                     },
                   }}
-                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  transformOrigin={{ horizontal: "right", vertical: "top" }}
                   // anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
                   {settings.map((setting) => (
                     <MenuItem key={setting.id} onClick={handleCloseUserMenu}>
-                      {<setting.icon sx={{marginRight:1,color:grey[600]}}  />}
+                      {
+                        <setting.icon
+                          sx={{ marginRight: 1, color: grey[600] }}
+                        />
+                      }
                       <Typography textAlign="center">
                         {setting.nameMenu}
                       </Typography>
@@ -174,7 +178,7 @@ const HeaderBar: FC<HeaderBarProps> = ({
         </Toolbar>
       </AppBar>
     </div>
-  )
-}
+  );
+};
 
-export default HeaderBar
+export default HeaderBar;
