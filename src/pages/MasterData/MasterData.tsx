@@ -5,7 +5,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import { Box, Tab, Typography } from "@mui/material";
 import { red } from "@mui/material/colors";
 import React from "react";
-import FactoryComponent from "./ChildsComponents/FactoryComponent";
+import FactoryComponent from "./ChildsComponents/FactoryComponent/FactoryComponent";
 import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded";
 
 const MasterData: React.FC = () => {
@@ -25,7 +25,7 @@ const MasterData: React.FC = () => {
     setValue(newValue);
   };
   return (
-    <div>
+    <div className="overflow-hidden">
       <Typography fontSize={18} marginBottom={2} fontWeight={600}>
         <PushPinRounded sx={{ color: red[500] }} /> Master Data
       </Typography>

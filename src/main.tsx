@@ -15,17 +15,19 @@ const defaultTheme = createTheme({
         },
       },
     },
-   
+    
     MuiTableCell: {
       styleOverrides: {
+        
         head: {
           backgroundColor: "#F5F9FC",
           borderBottom: "2px solid black",
           textAlign: "center",
         },
         body: {
-          padding: "0.5em",
+          padding: "0.4em",
           textAlign: "center",
+          fontSize:'13px'
         },
       },
     },
@@ -47,7 +49,7 @@ const defaultTheme = createTheme({
       contrastText: "#000",
     },
     success:{
-      main:green[400]
+      main:green[700]
     }
   },
 })

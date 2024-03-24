@@ -31,3 +31,9 @@
 ::-webkit-scrollbar-button {
   display: none;
 }
+body{
+  overflow: hidden;
+}
+.swal2-container {
+  z-index: 9999 !important;
+}

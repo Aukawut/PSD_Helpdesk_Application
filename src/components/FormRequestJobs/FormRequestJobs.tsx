@@ -258,7 +258,24 @@ const FormRequestJobs: React.FC = () => {
       });
   };
   console.log(fileUpload);
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    Array.from(fileUpload).forEach((file: any, index) => {
+      formData.append(`images`, file);
+    });
 
+    try {
+      const response = await axios.post(`${baseURL}/jobs/add`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Response:", response.data);
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
+  };
   useEffect(() => {
     getFactory();
     getUsers();
@@ -546,8 +563,15 @@ const FormRequestJobs: React.FC = () => {
           </div>
         </div>
         <Box className="mt-[1rem] text-[#fff]">
-          <Button variant="contained" color="success" sx={{color:'#fff'}}>
-            <CheckCircleOutlineRoundedIcon sx={{ marginRight: 1,color:'#fff' }} />
+          <Button
+            variant="contained"
+            color="success"
+            sx={{ color: "#fff" }}
+            onClick={handleSubmit}
+          >
+            <CheckCircleOutlineRoundedIcon
+              sx={{ marginRight: 1, color: "#fff" }}
+            />
             Add Job
           </Button>
         </Box>
