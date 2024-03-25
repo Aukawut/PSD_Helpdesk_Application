@@ -17,6 +17,12 @@ const BadgeCustom: React.FC<props> = ({ text, color }) => {
           {text}
         </div>
       );
+    case "purple":
+      return (
+        <div className="px-2 py-1 text-[11.5px] font-semibold bg-[#EADCFC] text-[#6B30AB] inline-block rounded-lg">
+          {text}
+        </div>
+      );
     default:
       return (
         <div className="px-2 py-1 text-[11.5px] font-semibold bg-[#DCE3E8] text-[#3E5463] inline-block rounded-lg">

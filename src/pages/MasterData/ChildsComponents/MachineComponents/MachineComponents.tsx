@@ -12,10 +12,11 @@ import { usePSDHelpdeskStore } from "../../../../store";
 import LoadingPage from "../../../../components/LoadingPage/LoadingPage";
 import BadgeCustom from "../../../../components/BadgeCustom/BadgeCustom";
 import ExportExcelFile from "../../../../components/ExportExcelFile/ExportExcelFile";
-import AddRequestTypeModal from "./AddRequestTypeModal";
-import EditRequestTypeModal from "./EditRequestTypeModal";
+
 
 import { motion } from "framer-motion";
+import EditMachineModal from "./EditMachineModal";
+import AddMachineModal from "./AddMachineModal";
 
 // Interface type Response
 
@@ -39,7 +40,7 @@ export interface RequestTypesAll {
   type_CreateBy: string | null;
 } 
 
-const RequestTypeComponents: React.FC = () => {
+const MachineComponents: React.FC = () => {
   const baseURL = import.meta.env.VITE_NODE_SERVER;
   const [loading, setLoading] = useState<boolean>(true);
   const token = usePSDHelpdeskStore((state) => state.token);
@@ -328,14 +329,14 @@ const RequestTypeComponents: React.FC = () => {
       }}
     >
       <Box>
-        {/* Modal for add RequestType */}
-        <AddRequestTypeModal
+        {/* Modal for add machine */}
+        <AddMachineModal
           open={open}
           handleClose={handleClose}
           callBackRender={callBackRender}
         />
-        {/*  Modal for Edit RequestType */}
-        <EditRequestTypeModal
+        {/*  Modal for Edit machine */}
+        <EditMachineModal
           open={openUpdate}
           handleClose={handleCloseUpdate}
           callBackRender={callBackRender}
@@ -355,7 +356,7 @@ const RequestTypeComponents: React.FC = () => {
         </Box>
         <Box className="mt-1">
           <MUIDataTable
-            title={<Typography>Request Types Management</Typography>}
+            title={<Typography>Machine Management</Typography>}
             options={options}
             data={requestType || []}
             columns={columns}
@@ -366,4 +367,4 @@ const RequestTypeComponents: React.FC = () => {
   );
 };
 
-export default RequestTypeComponents;
+export default MachineComponents;

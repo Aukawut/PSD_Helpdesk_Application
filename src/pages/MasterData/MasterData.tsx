@@ -11,6 +11,8 @@ import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded";
 import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
 import RequestTypeComponents from "./ChildsComponents/RequestTypeComponents/RequestTypeComponents";
 import HandymanRoundedIcon from '@mui/icons-material/HandymanRounded';
+import MachineComponents from "./ChildsComponents/MachineComponents/MachineComponents";
+import PrecisionManufacturingRoundedIcon from '@mui/icons-material/PrecisionManufacturingRounded';
 
 const MasterData: React.FC = () => {
   const [value, setValue] = React.useState("1");
@@ -64,6 +66,14 @@ const MasterData: React.FC = () => {
                 }
                 value="3"
               />
+               <Tab
+                label={
+                  <div className="flex items-center gap-x-2">
+                    <PrecisionManufacturingRoundedIcon /> Machine
+                  </div>
+                }
+                value="4"
+              />
             </TabList>
           </Box>
           <TabPanel value="1">
@@ -74,6 +84,9 @@ const MasterData: React.FC = () => {
           </TabPanel>
           <TabPanel value="3">
             <RequestTypeComponents />
+          </TabPanel>
+          <TabPanel value="4">
+            <MachineComponents />
           </TabPanel>
         </TabContext>
       </Box>
