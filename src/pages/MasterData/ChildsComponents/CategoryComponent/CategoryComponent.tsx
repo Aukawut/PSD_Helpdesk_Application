@@ -11,30 +11,34 @@ import Swal from "sweetalert2";
 import { usePSDHelpdeskStore } from "../../../../store";
 import LoadingPage from "../../../../components/LoadingPage/LoadingPage";
 import BadgeCustom from "../../../../components/BadgeCustom/BadgeCustom";
-import AddFactoryModal from "./AddFactoryModal";
+import AddFactoryModal from "./AddCategoryModal";
 import ExportExcelFile from "../../../../components/ExportExcelFile/ExportExcelFile";
-import EditFactoryModal from "./EditFactoryModal";
+import EditFactoryModal from "./EditCategoryModal";
 import { motion } from "framer-motion";
 
-export interface FactoryAll {
-  sf_ID: number;
-  sf_Code: string;
-  sf_Name: string;
-  sf_Description: string;
-  sf_CreateDate: string;
-  sf_CreateBy: string;
-  sf_UpdateDate: string;
-  sf_UpdateBy: string;
-  sf_Status: string;
+export interface CategoryAll {
+    CG_ID: number,
+    CG_Type: number,
+    CG_Name: string,
+    CG_Name_en: string,
+    CG_Description: string,
+    CG_TypeRemark: string | null,
+    CG_remark2: string | null,
+    CG_remark3: string | null,
+    CG_CreateDate: string,
+    CG_CreateBy: string,
+    CG_UpdateDate: string,
+    CG_UpdateBy: string,
+    CG_Status: string
 }
-const FactoryComponent: React.FC = () => {
+const CategoryComponent: React.FC = () => {
   const baseURL = import.meta.env.VITE_NODE_SERVER;
   const [loading, setLoading] = useState<boolean>(true);
   const token = usePSDHelpdeskStore((state) => state.token);
-  const [factory, setFactory] = useState<FactoryAll[]>();
+  const [category, setCategory] = useState<CategoryAll[]>();
   const [open, setOpen] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
-  const [objFactory, setObjFactory] = useState<FactoryAll>();
+  const [objCategory, setObjCategory] = useState<CategoryAll>();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -50,15 +54,15 @@ const FactoryComponent: React.FC = () => {
     console.log(indexOf);
     let newArray: any = [];
     for (let i = 0; i < indexOf.length; i++) {
-      if (factory !== undefined) {
-        newArray.push(factory[indexOf[i].dataIndex]);
+      if (category !== undefined) {
+        newArray.push(category[indexOf[i].dataIndex]);
       }
     }
     axios
       .post(
-        `${baseURL}/factory/delete/multiple`,
+        `${baseURL}/category/delete/multiple`,
         {
-          id: newArray?.map((val: any) => val.sf_ID),
+          id: newArray?.map((val: any) => val.CG_ID),
         },
         {
           headers: {
@@ -80,7 +84,7 @@ const FactoryComponent: React.FC = () => {
             showCancelButton: false,
             showConfirmButton: false,
           }).then(() => {
-            getFactory();
+            getCategory();
           });
         }
       })
@@ -89,10 +93,10 @@ const FactoryComponent: React.FC = () => {
       });
   };
 
-  const getFactory = async () => {
+  const getCategory = async () => {
     setLoading(true);
     await axios
-      .get(`${baseURL}/allFactory`, {
+      .get(`${baseURL}/category`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -101,7 +105,7 @@ const FactoryComponent: React.FC = () => {
         if (!res.data.err && res.data.status === "Ok") {
           console.log(res.data);
           setLoading(false);
-          setFactory(res.data.result);
+          setCategory(res.data.result);
         } else {
           console.log(123);
         }
@@ -112,8 +116,8 @@ const FactoryComponent: React.FC = () => {
   };
 
   const findFactory = (id: number) => {
-    const obj = factory?.find((x) => x.sf_ID === id);
-    setObjFactory(obj);
+    const obj = category?.find((x) => x.CG_ID === id);
+    setObjCategory(obj);
     console.log(obj);
 
     if (obj !== null && obj !== undefined) {
@@ -132,7 +136,7 @@ const FactoryComponent: React.FC = () => {
     download: false,
     print: false,
     downloadOptions: {
-      filename: `${moment().format("YYYY-MM-DDHHmmss")}_FactoryMaster.csv`, // Specify the filename for the downloaded CSV file
+      filename: `${moment().format("YYYY-MM-DDHHmmss")}_CategoryMaster.csv`, // Specify the filename for the downloaded CSV file
       separator: ",", // Specify the column separator (comma by default)
       charset: "utf-8", // Ensure UTF-8 encoding
     },
@@ -165,11 +169,11 @@ const FactoryComponent: React.FC = () => {
     },
   };
 
-  const deleteFactory = (id: number) => {
+  const deleteCategory = (id: number) => {
     axios
-      .delete(`${baseURL}/factory/delete/${id}`, {
+      .delete(`${baseURL}/category/delete/${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, // Token Json Web Token : JWT
         },
       })
       .then((res: AxiosResponse<any, any>) => {
@@ -186,7 +190,7 @@ const FactoryComponent: React.FC = () => {
             showCancelButton: false,
             showConfirmButton: false,
           }).then(() => {
-            getFactory();
+            getCategory();
           });
         }
       })
@@ -197,7 +201,7 @@ const FactoryComponent: React.FC = () => {
 
   const columns = [
     {
-      name: "sf_ID",
+      name: "CG_ID",
       label: "Action",
       options: {
         filter: false,
@@ -218,7 +222,8 @@ const FactoryComponent: React.FC = () => {
                     cancelButtonText: "ยกเลิก",
                   }).then((result) => {
                     if (result.isConfirmed) {
-                      deleteFactory(value);
+           
+                      deleteCategory(value); // ส่ง Id เข้า Function เพื่อลบข้อมูล
                     }
                   });
                 }}
@@ -239,31 +244,15 @@ const FactoryComponent: React.FC = () => {
       },
     },
     {
-      name: "sf_Code",
-      label: "Code",
+      name: "CG_Name",
+      label: "Name",
       options: {
         filter: true,
         sort: true,
       },
     },
     {
-      name: "sf_Name",
-      label: "Name",
-      options: {
-        filter: true,
-        sort: false,
-      },
-    },
-    {
-      name: "sf_Description",
-      label: "Description",
-      options: {
-        filter: true,
-        sort: false,
-      },
-    },
-    {
-      name: "sf_CreateDate",
+      name: "CG_CreateDate",
       label: "Create Date",
       options: {
         filter: true,
@@ -272,15 +261,27 @@ const FactoryComponent: React.FC = () => {
       },
     },
     {
-      name: "sf_CreateBy",
+      name: "CG_CreateBy",
       label: "Create By",
       options: {
         filter: true,
         sort: false,
+        
       },
     },
     {
-      name: "sf_Status",
+      name: "CG_UpdateDate",
+      label: "Update Date",
+      options: {
+        filter: true,
+        sort: false,
+
+        customBodyRender: (value: any) => value !== null ? (moment(value).subtract(7,'hours').locale('th').format('LLL')):'ไม่ได้ระบุ'
+      },
+    },
+  
+    {
+      name: "CG_Status",
       label: "Status",
       options: {
         filter: true,
@@ -300,7 +301,7 @@ const FactoryComponent: React.FC = () => {
     setRenderDom((prev) => !prev);
   };
   useEffect(() => {
-    getFactory();
+    getCategory();
   }, [renderDom]);
   return loading ? (
     <Box className="flex h-[50vh] items-center justify-center">
@@ -333,7 +334,7 @@ const FactoryComponent: React.FC = () => {
           open={openUpdate}
           handleClose={handleCloseUpdate}
           callBackRender={callBackRender}
-          objFactory={objFactory}
+          objectCategory={objCategory}
         />
         <Box className="flex gap-x-2">
           <Button
@@ -345,13 +346,13 @@ const FactoryComponent: React.FC = () => {
           >
             <AddRoundedIcon /> Add
           </Button>
-          <ExportExcelFile data={factory} fileName={`FactoryMaster`} />
+          <ExportExcelFile data={category} fileName={`CategoryMaster`} />
         </Box>
         <Box className="mt-1">
           <MUIDataTable
-            title={<Typography>Factory Management</Typography>}
+            title={<Typography>Category Management</Typography>}
             options={options}
-            data={factory || []}
+            data={category || []}
             columns={columns}
           />
         </Box>
@@ -360,4 +361,4 @@ const FactoryComponent: React.FC = () => {
   );
 };
 
-export default FactoryComponent;
+export default CategoryComponent;

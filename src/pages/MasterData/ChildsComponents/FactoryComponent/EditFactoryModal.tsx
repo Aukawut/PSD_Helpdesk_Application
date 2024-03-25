@@ -20,16 +20,20 @@ import RestartAltRoundedIcon from "@mui/icons-material/RestartAltRounded";
 import axios, { AxiosResponse } from "axios";
 import { usePSDHelpdeskStore } from "../../../../store";
 import Swal from "sweetalert2";
+import { FactoryAll } from "./FactoryComponent";
 
 interface PropsModal {
   handleClose: () => void;
   callBackRender: () => void;
   open: boolean;
+  objFactory: FactoryAll | undefined;
 }
-const AddFactoryModal: React.FC<PropsModal> = ({
+
+const EditFactoryModal: React.FC<PropsModal> = ({
   handleClose,
   open,
   callBackRender,
+  objFactory,
 }) => {
   const [code, setCode] = useState<string>("");
   const [nameFactory, setNameFactory] = useState<string>("");
@@ -37,7 +41,7 @@ const AddFactoryModal: React.FC<PropsModal> = ({
   const [status, setStatus] = useState<string>("ENABLE");
   const baseURL = import.meta.env.VITE_NODE_SERVER;
   const token = usePSDHelpdeskStore((state) => state.token);
-  const info = usePSDHelpdeskStore((state) => state.info);
+  const info: any = usePSDHelpdeskStore((state) => state.info);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const style = {
@@ -51,11 +55,11 @@ const AddFactoryModal: React.FC<PropsModal> = ({
     borderRadius: "10px",
     p: 4,
   };
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleUpdateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await axios
-      .post(
-        `${baseURL}/factory/add`,
+      .put(
+        `${baseURL}/factory/update/${objFactory?.sf_ID}`,
         {
           code: code,
           name: nameFactory,
@@ -94,20 +98,31 @@ const AddFactoryModal: React.FC<PropsModal> = ({
         console.log(err);
       });
   };
+  const setInitValue = (obj: FactoryAll) => {
+    if (obj) {
+      setCode(obj.sf_Code);
+      setNameFactory(obj.sf_Name);
+      setStatus(obj.sf_Status);
+      setDesc(obj.sf_Description);
+    }
+  };
   const resetForm = () => {
     setCode("");
     setDesc("");
     setNameFactory("");
-    setStatus('ENABLE')
+    setStatus("ENABLE");
     if (inputRef.current) {
       inputRef.current.focus();
     }
   };
   useEffect(() => {
-    if (open) {
-      resetForm();
+    resetForm();
+    if (objFactory !== null && objFactory !== undefined) {
+      setTimeout(() => {
+        setInitValue(objFactory);
+      }, 200);
     }
-  }, [open]);
+  }, [objFactory]);
   return (
     <div>
       <Modal
@@ -132,7 +147,7 @@ const AddFactoryModal: React.FC<PropsModal> = ({
                 component="h2"
                 sx={{ position: "absolute", top: 0 }}
               >
-                Add Factory Master
+                Update Factory Master #{objFactory?.sf_ID}
               </Typography>
             </div>
 
@@ -146,7 +161,7 @@ const AddFactoryModal: React.FC<PropsModal> = ({
             </div>
           </Box>
           <Box className="h-[400px] overflow-auto mt-[1rem]">
-            <form className="mt-[1rem]" onSubmit={handleSubmit}>
+            <form className="mt-[1rem]" onSubmit={handleUpdateSubmit}>
               <div className="grid grid-cols-12 gap-2">
                 <div className="grid col-span-4">
                   <FormControl sx={{ marginBottom: "0.7rem" }}>
@@ -227,7 +242,7 @@ const AddFactoryModal: React.FC<PropsModal> = ({
               <div className="flex gap-x-2 mt-2">
                 <Button variant="contained" type="submit">
                   <SaveRoundedIcon sx={{ marginRight: 1 }} />
-                  Save
+                  Update
                 </Button>
                 <Button variant="outlined" color="error" onClick={resetForm}>
                   <RestartAltRoundedIcon sx={{ marginRight: 1 }} /> Reset Form
@@ -241,4 +256,4 @@ const AddFactoryModal: React.FC<PropsModal> = ({
   );
 };
 
-export default AddFactoryModal;
+export default EditFactoryModal;

@@ -26,13 +26,13 @@ interface PropsModal {
   callBackRender: () => void;
   open: boolean;
 }
-const AddFactoryModal: React.FC<PropsModal> = ({
+const AddRequestTypeModal: React.FC<PropsModal> = ({
   handleClose,
   open,
   callBackRender,
 }) => {
-  const [code, setCode] = useState<string>("");
-  const [nameFactory, setNameFactory] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [nameEN, setNameEN] = useState<string>("");
   const [desc, setDesc] = useState<string>("");
   const [status, setStatus] = useState<string>("ENABLE");
   const baseURL = import.meta.env.VITE_NODE_SERVER;
@@ -55,13 +55,13 @@ const AddFactoryModal: React.FC<PropsModal> = ({
     e.preventDefault();
     await axios
       .post(
-        `${baseURL}/factory/add`,
+        `${baseURL}/requestType/add`,
         {
-          code: code,
-          name: nameFactory,
-          desc: desc,
-          empCode: info?.hrc_info.UHR_EmpCode,
+          type_name: name,
+          type_name_en: nameEN,
+          type_desc: desc,
           status: status,
+          empCode: info?.hrc_info.UHR_EmpCode
         },
         {
           headers: {
@@ -95,10 +95,10 @@ const AddFactoryModal: React.FC<PropsModal> = ({
       });
   };
   const resetForm = () => {
-    setCode("");
     setDesc("");
-    setNameFactory("");
-    setStatus('ENABLE')
+    setName("");
+    setStatus("ENABLE");
+    setNameEN("")
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -132,7 +132,7 @@ const AddFactoryModal: React.FC<PropsModal> = ({
                 component="h2"
                 sx={{ position: "absolute", top: 0 }}
               >
-                Add Factory Master
+                Add Request Types Master
               </Typography>
             </div>
 
@@ -148,16 +148,28 @@ const AddFactoryModal: React.FC<PropsModal> = ({
           <Box className="h-[400px] overflow-auto mt-[1rem]">
             <form className="mt-[1rem]" onSubmit={handleSubmit}>
               <div className="grid grid-cols-12 gap-2">
-                <div className="grid col-span-4">
-                  <FormControl sx={{ marginBottom: "0.7rem" }}>
+                <div className="grid col-span-6">
+                  <FormControl sx={{ marginBottom: "0.7rem" }} fullWidth>
                     <TextField
                       autoFocus
-                      label="Code"
+                      label="Name"
+                      inputRef={inputRef}
                       required
                       id="outlined-size-small"
                       size="small"
-                      inputRef={inputRef}
-                      value={code}
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </FormControl>
+                </div>
+                <div className="grid col-span-6">
+                  <FormControl sx={{ marginBottom: "0.7rem" }}>
+                    <TextField
+                      label="Name EN"
+                      required
+                      id="outlined-size-small"
+                      size="small"
+                      value={nameEN}
                       onChange={(e) => {
                         const inputValue = e.target.value;
                         const englishNumberRegex = /^[A-Za-z0-9\s]+$/; // Regular expression to match English letters, numbers, and spaces
@@ -165,21 +177,9 @@ const AddFactoryModal: React.FC<PropsModal> = ({
                           englishNumberRegex.test(inputValue) ||
                           inputValue === ""
                         ) {
-                          setCode(e.target.value);
+                          setNameEN(e.target.value);
                         }
                       }}
-                    />
-                  </FormControl>
-                </div>
-                <div className="grid col-span-8">
-                  <FormControl sx={{ marginBottom: "0.7rem" }} fullWidth>
-                    <TextField
-                      label="Name"
-                      required
-                      id="outlined-size-small"
-                      size="small"
-                      value={nameFactory}
-                      onChange={(e) => setNameFactory(e.target.value)}
                     />
                   </FormControl>
                 </div>
@@ -241,4 +241,4 @@ const AddFactoryModal: React.FC<PropsModal> = ({
   );
 };
 
-export default AddFactoryModal;
+export default AddRequestTypeModal;

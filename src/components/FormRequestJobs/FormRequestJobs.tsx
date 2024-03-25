@@ -241,7 +241,7 @@ const FormRequestJobs: React.FC = () => {
 
   const getCategoryAll = async () => {
     await axios
-      .get(`${baseURL}/category`, {
+      .get(`${baseURL}/requestType`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

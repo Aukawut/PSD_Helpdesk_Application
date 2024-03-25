@@ -1,8 +1,9 @@
+import { CircularProgress } from '@mui/material'
 import React from 'react'
 
 const LoadingPage:React.FC = () => {
   return (
-    <div>LoadingPage</div>
+    <div><CircularProgress disableShrink /></div>
   )
 }
 

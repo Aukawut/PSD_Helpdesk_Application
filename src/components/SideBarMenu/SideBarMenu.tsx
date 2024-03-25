@@ -91,6 +91,7 @@ export default function SideBarMenu(props: Props) {
       <div>
         <Box className="mx-2 bg-gray-100 rounded-2xl h-[100px] p-2">
           <Box className="flex justify-start items-center gap-x-2 h-full">
+            
             <StyledBadge
               overlap="circular"
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -213,9 +214,8 @@ export default function SideBarMenu(props: Props) {
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          overflow:'auto'
+          overflow: "auto",
         }}
-        
       >
         <Toolbar />
         <Outlet />

@@ -6,7 +6,11 @@ import { Box, Tab, Typography } from "@mui/material";
 import { red } from "@mui/material/colors";
 import React from "react";
 import FactoryComponent from "./ChildsComponents/FactoryComponent/FactoryComponent";
+import CategoryComponent from "./ChildsComponents/CategoryComponent/CategoryComponent";
 import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded";
+import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
+import RequestTypeComponents from "./ChildsComponents/RequestTypeComponents/RequestTypeComponents";
+import HandymanRoundedIcon from '@mui/icons-material/HandymanRounded';
 
 const MasterData: React.FC = () => {
   const [value, setValue] = React.useState("1");
@@ -35,16 +39,41 @@ const MasterData: React.FC = () => {
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab
                 label={
-                  <div className="flex items-center gap-x-2">
+                  <div
+                    className="flex items-center gap-x-2"
+                    
+                  >
                     <HomeWorkRoundedIcon /> Factory
                   </div>
                 }
                 value="1"
               />
+              <Tab
+                label={
+                  <div className="flex items-center gap-x-2">
+                    <CategoryRoundedIcon /> Category
+                  </div>
+                }
+                value="2"
+              />
+               <Tab
+                label={
+                  <div className="flex items-center gap-x-2">
+                    <HandymanRoundedIcon /> Request types
+                  </div>
+                }
+                value="3"
+              />
             </TabList>
           </Box>
           <TabPanel value="1">
             <FactoryComponent />
+          </TabPanel>
+          <TabPanel value="2">
+            <CategoryComponent />
+          </TabPanel>
+          <TabPanel value="3">
+            <RequestTypeComponents />
           </TabPanel>
         </TabContext>
       </Box>

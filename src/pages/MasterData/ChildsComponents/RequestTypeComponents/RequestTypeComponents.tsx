@@ -11,30 +11,42 @@ import Swal from "sweetalert2";
 import { usePSDHelpdeskStore } from "../../../../store";
 import LoadingPage from "../../../../components/LoadingPage/LoadingPage";
 import BadgeCustom from "../../../../components/BadgeCustom/BadgeCustom";
-import AddFactoryModal from "./AddFactoryModal";
 import ExportExcelFile from "../../../../components/ExportExcelFile/ExportExcelFile";
-import EditFactoryModal from "./EditFactoryModal";
+import AddRequestTypeModal from "./AddRequestTypeModal";
+import EditRequestTypeModal from "./EditRequestTypeModal";
+
 import { motion } from "framer-motion";
 
-export interface FactoryAll {
-  sf_ID: number;
-  sf_Code: string;
-  sf_Name: string;
-  sf_Description: string;
-  sf_CreateDate: string;
-  sf_CreateBy: string;
-  sf_UpdateDate: string;
-  sf_UpdateBy: string;
-  sf_Status: string;
-}
-const FactoryComponent: React.FC = () => {
+// Interface type Response
+
+export interface RequestTypesAll {
+  type_id: number;
+  type: number;
+  type_name: string;
+  type_name_en: string;
+  type_description: string;
+  type_remark1: string | null;
+  type_remark2: string | null;
+  type_remark3: string | null;
+  type_UpdateDate: string | null;
+  type_UpdateBy: string | null;
+  _UserID: string | null;
+  _DateEdit: string | null;
+  _Remark: string | null;
+  CG_ID: string | null;
+  type_Status: string;
+  type_CreateDate: string | null;
+  type_CreateBy: string | null;
+} 
+
+const RequestTypeComponents: React.FC = () => {
   const baseURL = import.meta.env.VITE_NODE_SERVER;
   const [loading, setLoading] = useState<boolean>(true);
   const token = usePSDHelpdeskStore((state) => state.token);
-  const [factory, setFactory] = useState<FactoryAll[]>();
+  const [requestType, setRequestType] = useState<RequestTypesAll[]>();
   const [open, setOpen] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
-  const [objFactory, setObjFactory] = useState<FactoryAll>();
+  const [objRequestTypes, setObjRequestTypes] = useState<RequestTypesAll>();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -50,15 +62,16 @@ const FactoryComponent: React.FC = () => {
     console.log(indexOf);
     let newArray: any = [];
     for (let i = 0; i < indexOf.length; i++) {
-      if (factory !== undefined) {
-        newArray.push(factory[indexOf[i].dataIndex]);
+      if (requestType !== undefined) {
+        newArray.push(requestType[indexOf[i].dataIndex]);
       }
     }
+    
     axios
       .post(
-        `${baseURL}/factory/delete/multiple`,
+        `${baseURL}/requestType/delete/multiple`,
         {
-          id: newArray?.map((val: any) => val.sf_ID),
+          id: newArray?.map((val: any) => val.type_id),
         },
         {
           headers: {
@@ -80,7 +93,7 @@ const FactoryComponent: React.FC = () => {
             showCancelButton: false,
             showConfirmButton: false,
           }).then(() => {
-            getFactory();
+            getRequestTypes();
           });
         }
       })
@@ -89,10 +102,10 @@ const FactoryComponent: React.FC = () => {
       });
   };
 
-  const getFactory = async () => {
+  const getRequestTypes = async () => {
     setLoading(true);
     await axios
-      .get(`${baseURL}/allFactory`, {
+      .get(`${baseURL}/allRequestType`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -101,7 +114,7 @@ const FactoryComponent: React.FC = () => {
         if (!res.data.err && res.data.status === "Ok") {
           console.log(res.data);
           setLoading(false);
-          setFactory(res.data.result);
+          setRequestType(res.data.result);
         } else {
           console.log(123);
         }
@@ -111,9 +124,9 @@ const FactoryComponent: React.FC = () => {
       });
   };
 
-  const findFactory = (id: number) => {
-    const obj = factory?.find((x) => x.sf_ID === id);
-    setObjFactory(obj);
+  const findTypes = (id: number) => {
+    const obj = requestType?.find((x) => x.type_id === id);
+    setObjRequestTypes(obj);
     console.log(obj);
 
     if (obj !== null && obj !== undefined) {
@@ -132,7 +145,7 @@ const FactoryComponent: React.FC = () => {
     download: false,
     print: false,
     downloadOptions: {
-      filename: `${moment().format("YYYY-MM-DDHHmmss")}_FactoryMaster.csv`, // Specify the filename for the downloaded CSV file
+      filename: `${moment().format("YYYY-MM-DDHHmmss")}_RequestTypeMaster.csv`, // Specify the filename for the downloaded CSV file
       separator: ",", // Specify the column separator (comma by default)
       charset: "utf-8", // Ensure UTF-8 encoding
     },
@@ -165,9 +178,11 @@ const FactoryComponent: React.FC = () => {
     },
   };
 
-  const deleteFactory = (id: number) => {
+  // Function ลบข้อมูล
+  
+  const deleteRequestTypes = (id: number) => {
     axios
-      .delete(`${baseURL}/factory/delete/${id}`, {
+      .delete(`${baseURL}/requestType/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -186,7 +201,7 @@ const FactoryComponent: React.FC = () => {
             showCancelButton: false,
             showConfirmButton: false,
           }).then(() => {
-            getFactory();
+            getRequestTypes();
           });
         }
       })
@@ -197,7 +212,7 @@ const FactoryComponent: React.FC = () => {
 
   const columns = [
     {
-      name: "sf_ID",
+      name: "type_id",
       label: "Action",
       options: {
         filter: false,
@@ -218,7 +233,7 @@ const FactoryComponent: React.FC = () => {
                     cancelButtonText: "ยกเลิก",
                   }).then((result) => {
                     if (result.isConfirmed) {
-                      deleteFactory(value);
+                      deleteRequestTypes(value);
                     }
                   });
                 }}
@@ -229,7 +244,7 @@ const FactoryComponent: React.FC = () => {
             <Tooltip title="แก้ไขข้อมูล">
               <EditRoundedIcon
                 onClick={() => {
-                  findFactory(value);
+                  findTypes(value);
                 }}
                 sx={{ fontSize: 20, color: yellow[700] }}
               />
@@ -239,15 +254,7 @@ const FactoryComponent: React.FC = () => {
       },
     },
     {
-      name: "sf_Code",
-      label: "Code",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "sf_Name",
+      name: "type_name",
       label: "Name",
       options: {
         filter: true,
@@ -255,32 +262,31 @@ const FactoryComponent: React.FC = () => {
       },
     },
     {
-      name: "sf_Description",
-      label: "Description",
-      options: {
-        filter: true,
-        sort: false,
-      },
-    },
-    {
-      name: "sf_CreateDate",
+      name: "type_CreateDate",
       label: "Create Date",
       options: {
         filter: true,
         sort: false,
-        customBodyRender: (value: any) => (moment(value).subtract(7,'hours').locale('th').format('LLL'))
+        customBodyRender: (value: any) =>
+          value !== null
+            ? moment(value).subtract(7, "hours").locale("th").format("LLL")
+            : "ไม่ได้ระบุ",
       },
     },
     {
-      name: "sf_CreateBy",
+      name: "type_CreateBy",
       label: "Create By",
       options: {
         filter: true,
         sort: false,
+        customBodyRender: (value: any) =>
+          value !== null ? value : "ไม่ได้ระบุ",
       },
     },
+  
+   
     {
-      name: "sf_Status",
+      name: "type_Status",
       label: "Status",
       options: {
         filter: true,
@@ -300,7 +306,7 @@ const FactoryComponent: React.FC = () => {
     setRenderDom((prev) => !prev);
   };
   useEffect(() => {
-    getFactory();
+    getRequestTypes();
   }, [renderDom]);
   return loading ? (
     <Box className="flex h-[50vh] items-center justify-center">
@@ -323,17 +329,17 @@ const FactoryComponent: React.FC = () => {
     >
       <Box>
         {/* Modal for add factory */}
-        <AddFactoryModal
+        <AddRequestTypeModal
           open={open}
           handleClose={handleClose}
           callBackRender={callBackRender}
         />
         {/*  Modal for Edit Factory */}
-        <EditFactoryModal
+        <EditRequestTypeModal
           open={openUpdate}
           handleClose={handleCloseUpdate}
           callBackRender={callBackRender}
-          objFactory={objFactory}
+          objRequestTypes={objRequestTypes}
         />
         <Box className="flex gap-x-2">
           <Button
@@ -345,13 +351,13 @@ const FactoryComponent: React.FC = () => {
           >
             <AddRoundedIcon /> Add
           </Button>
-          <ExportExcelFile data={factory} fileName={`FactoryMaster`} />
+          <ExportExcelFile data={requestType} fileName={`FactoryMaster`} />
         </Box>
         <Box className="mt-1">
           <MUIDataTable
-            title={<Typography>Factory Management</Typography>}
+            title={<Typography>Request Types Management</Typography>}
             options={options}
-            data={factory || []}
+            data={requestType || []}
             columns={columns}
           />
         </Box>
@@ -360,4 +366,4 @@ const FactoryComponent: React.FC = () => {
   );
 };
 
-export default FactoryComponent;
+export default RequestTypeComponents;

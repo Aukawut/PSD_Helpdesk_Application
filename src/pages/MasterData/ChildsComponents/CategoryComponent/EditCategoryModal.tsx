@@ -20,19 +20,22 @@ import RestartAltRoundedIcon from "@mui/icons-material/RestartAltRounded";
 import axios, { AxiosResponse } from "axios";
 import { usePSDHelpdeskStore } from "../../../../store";
 import Swal from "sweetalert2";
+import { CategoryAll } from "./CategoryComponent";
 
 interface PropsModal {
   handleClose: () => void;
   callBackRender: () => void;
   open: boolean;
+  objectCategory: CategoryAll | undefined;
 }
-const AddFactoryModal: React.FC<PropsModal> = ({
+const EditCategoryModal: React.FC<PropsModal> = ({
   handleClose,
   open,
   callBackRender,
+  objectCategory,
 }) => {
-  const [code, setCode] = useState<string>("");
-  const [nameFactory, setNameFactory] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [nameEN, setNameEN] = useState<string>("");
   const [desc, setDesc] = useState<string>("");
   const [status, setStatus] = useState<string>("ENABLE");
   const baseURL = import.meta.env.VITE_NODE_SERVER;
@@ -51,15 +54,15 @@ const AddFactoryModal: React.FC<PropsModal> = ({
     borderRadius: "10px",
     p: 4,
   };
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleUpdateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await axios
-      .post(
-        `${baseURL}/factory/add`,
+      .put(
+        `${baseURL}/category/update/${objectCategory?.CG_ID}`,
         {
-          code: code,
-          name: nameFactory,
-          desc: desc,
+          cgName: name,
+          cgNameEn: nameEN,
+          cgDesc: desc,
           empCode: info?.hrc_info.UHR_EmpCode,
           status: status,
         },
@@ -94,20 +97,32 @@ const AddFactoryModal: React.FC<PropsModal> = ({
         console.log(err);
       });
   };
+
+  const setInitValue = (obj: CategoryAll) => {
+    if (obj) {
+      setName(obj.CG_Name);
+      setNameEN(obj.CG_Name_en);
+      setStatus(obj.CG_Status);
+      setDesc(obj.CG_Description);
+    }
+  };
   const resetForm = () => {
-    setCode("");
+    setName("");
+    setNameEN("");
     setDesc("");
-    setNameFactory("");
-    setStatus('ENABLE')
+    setStatus("ENABLE");
     if (inputRef.current) {
       inputRef.current.focus();
     }
   };
   useEffect(() => {
-    if (open) {
-      resetForm();
+    resetForm();
+    if (objectCategory !== null && objectCategory !== undefined) {
+      setTimeout(() => {
+        setInitValue(objectCategory);
+      }, 200);
     }
-  }, [open]);
+  }, [objectCategory]);
   return (
     <div>
       <Modal
@@ -132,7 +147,7 @@ const AddFactoryModal: React.FC<PropsModal> = ({
                 component="h2"
                 sx={{ position: "absolute", top: 0 }}
               >
-                Add Factory Master
+                Add Category Master
               </Typography>
             </div>
 
@@ -146,18 +161,32 @@ const AddFactoryModal: React.FC<PropsModal> = ({
             </div>
           </Box>
           <Box className="h-[400px] overflow-auto mt-[1rem]">
-            <form className="mt-[1rem]" onSubmit={handleSubmit}>
+            <form className="mt-[1rem]" onSubmit={handleUpdateSubmit}>
               <div className="grid grid-cols-12 gap-2">
                 <div className="grid col-span-4">
                   <FormControl sx={{ marginBottom: "0.7rem" }}>
                     <TextField
                       autoFocus
-                      label="Code"
+                      label="Name"
                       required
                       id="outlined-size-small"
                       size="small"
                       inputRef={inputRef}
-                      value={code}
+                      value={name}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                      }}
+                    />
+                  </FormControl>
+                </div>
+                <div className="grid col-span-8">
+                  <FormControl sx={{ marginBottom: "0.7rem" }}>
+                    <TextField
+                      label="Name EN"
+                      required
+                      id="outlined-size-small2"
+                      size="small"
+                      value={nameEN}
                       onChange={(e) => {
                         const inputValue = e.target.value;
                         const englishNumberRegex = /^[A-Za-z0-9\s]+$/; // Regular expression to match English letters, numbers, and spaces
@@ -165,21 +194,9 @@ const AddFactoryModal: React.FC<PropsModal> = ({
                           englishNumberRegex.test(inputValue) ||
                           inputValue === ""
                         ) {
-                          setCode(e.target.value);
+                          setNameEN(e.target.value);
                         }
                       }}
-                    />
-                  </FormControl>
-                </div>
-                <div className="grid col-span-8">
-                  <FormControl sx={{ marginBottom: "0.7rem" }} fullWidth>
-                    <TextField
-                      label="Name"
-                      required
-                      id="outlined-size-small"
-                      size="small"
-                      value={nameFactory}
-                      onChange={(e) => setNameFactory(e.target.value)}
                     />
                   </FormControl>
                 </div>
@@ -227,7 +244,7 @@ const AddFactoryModal: React.FC<PropsModal> = ({
               <div className="flex gap-x-2 mt-2">
                 <Button variant="contained" type="submit">
                   <SaveRoundedIcon sx={{ marginRight: 1 }} />
-                  Save
+                  Update
                 </Button>
                 <Button variant="outlined" color="error" onClick={resetForm}>
                   <RestartAltRoundedIcon sx={{ marginRight: 1 }} /> Reset Form
@@ -241,4 +258,4 @@ const AddFactoryModal: React.FC<PropsModal> = ({
   );
 };
 
-export default AddFactoryModal;
+export default EditCategoryModal;

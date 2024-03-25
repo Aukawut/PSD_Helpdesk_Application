@@ -17,6 +17,7 @@ import { IconTypeMap } from "@mui/material";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { FC } from "react";
 import { grey } from "@mui/material/colors";
+import CropFreeRoundedIcon from "@mui/icons-material/CropFreeRounded";
 
 type MenuSettingIcon = OverridableComponent<IconTypeMap<unknown, "svg">>;
 
@@ -104,7 +105,8 @@ const HeaderBar: FC<HeaderBarProps> = ({
                   PSD Helpdesk System
                 </Typography>
               </Box>
-              <Box sx={{ flexGrow: 0 }}>
+              <Box sx={{ flexGrow: 0}}>
+                <CropFreeRoundedIcon sx={{fontSize:25,cursor:'pointer',marginRight:2}} />
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <StyledBadge

@@ -7,6 +7,7 @@ import "./App.css"
 import NotFound from "./pages/NotFound/NotFound"
 import RequestJob from "./pages/RequestJob/RequestJob"
 import MasterData from "./pages/MasterData/MasterData"
+import Report from "./pages/Report/Report"
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route element={<TicketsPage />} path="/tickets"></Route>
           <Route element={<RequestJob />} path="/request"></Route>
           <Route element={<MasterData />} path="/masterData"></Route>
+          <Route element={<Report />} path="/report"></Route>
         </Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="*" element={<NotFound />}></Route>
