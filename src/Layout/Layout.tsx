@@ -1,12 +1,7 @@
-import SideBarMenu from "../components/SideBarMenu/SideBarMenu"
+import SideBarMenu from "../components/SideBarMenu/SideBarMenu";
 
 function Layout() {
-  return (
-   
-        <SideBarMenu />
-
-    
-  )
+  return <SideBarMenu />;
 }
 
-export default Layout
+export default Layout;
