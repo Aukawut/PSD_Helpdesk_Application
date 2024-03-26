@@ -13,41 +13,40 @@ import LoadingPage from "../../../../components/LoadingPage/LoadingPage";
 import BadgeCustom from "../../../../components/BadgeCustom/BadgeCustom";
 import ExportExcelFile from "../../../../components/ExportExcelFile/ExportExcelFile";
 
-
 import { motion } from "framer-motion";
 import EditMachineModal from "./EditMachineModal";
 import AddMachineModal from "./AddMachineModal";
 
-// Interface type Response
+export interface optionsProcess {
+  value: string;
+  label: string;
+}
 
-export interface RequestTypesAll {
-  type_id: number;
-  type: number;
-  type_name: string;
-  type_name_en: string;
-  type_description: string;
-  type_remark1: string | null;
-  type_remark2: string | null;
-  type_remark3: string | null;
-  type_UpdateDate: string | null;
-  type_UpdateBy: string | null;
-  _UserID: string | null;
-  _DateEdit: string | null;
-  _Remark: string | null;
-  CG_ID: string | null;
-  type_Status: string;
-  type_CreateDate: string | null;
-  type_CreateBy: string | null;
-} 
+// Interface type Response
+export interface MachineAll {
+  site_mcid: number;
+  site_mccode: string;
+  site_mcname: string;
+  site_process_id: string;
+  site_description: string;
+  site_factory: string;
+  site_status: string;
+  site_mccreatedate: string | null;
+  site_mccreateby: string;
+  name_area: string;
+  name_process: string;
+}
 
 const MachineComponents: React.FC = () => {
   const baseURL = import.meta.env.VITE_NODE_SERVER;
   const [loading, setLoading] = useState<boolean>(true);
   const token = usePSDHelpdeskStore((state) => state.token);
-  const [requestType, setRequestType] = useState<RequestTypesAll[]>();
+  const [machineLists, setMachineList] = useState<MachineAll[]>();
   const [open, setOpen] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
-  const [objRequestTypes, setObjRequestTypes] = useState<RequestTypesAll>();
+  const [objMachine, setObjMachine] = useState<MachineAll>();
+  const [processMaster, setProcessMaster] = useState<optionsProcess[]>();
+  const [factoryMaster, setFactoryMaster] = useState<optionsProcess[]>();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -56,6 +55,61 @@ const MachineComponents: React.FC = () => {
 
   const [renderDom, setRenderDom] = useState<boolean>(false);
 
+  // Function to get Process Master
+  const getProcessMaster = async () => {
+    setLoading(true);
+    await axios
+      .get(`${baseURL}/process`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        if (!res.data.err && res.data.status === "Ok") {
+          console.log(res.data);
+          setLoading(false);
+          setProcessMaster(
+            res.data.result.map((val: any) => ({
+              value: val.id_process,
+              label: val.name_process,
+            }))
+          );
+        } else {
+          console.log(123);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // Function to get Factory Master
+  const getFactoryMaster = async () => {
+    setLoading(true);
+    await axios
+      .get(`${baseURL}/factory`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        if (!res.data.err && res.data.status === "Ok") {
+          console.log(res.data);
+          setLoading(false);
+          setFactoryMaster(
+            res.data.result.map((val: any) => ({
+              value: val.site_factory,
+              label: val.site_factory,
+            }))
+          );
+        } else {
+          console.log(123);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   // Function Remove Multiple row
   const handleDelete = async (
     indexOf: { index: number; dataIndex: number }[]
@@ -63,16 +117,15 @@ const MachineComponents: React.FC = () => {
     console.log(indexOf);
     let newArray: any = [];
     for (let i = 0; i < indexOf.length; i++) {
-      if (requestType !== undefined) {
-        newArray.push(requestType[indexOf[i].dataIndex]);
+      if (machineLists !== undefined) {
+        newArray.push(machineLists[indexOf[i].dataIndex]);
       }
     }
-    
     axios
       .post(
-        `${baseURL}/requestType/delete/multiple`,
+        `${baseURL}/machine/delete/multiple`,
         {
-          id: newArray?.map((val: any) => val.type_id),
+          id: newArray?.map((val: any) => val.site_mcid),
         },
         {
           headers: {
@@ -94,7 +147,7 @@ const MachineComponents: React.FC = () => {
             showCancelButton: false,
             showConfirmButton: false,
           }).then(() => {
-            getRequestTypes();
+            getMachineLists();
           });
         }
       })
@@ -103,10 +156,10 @@ const MachineComponents: React.FC = () => {
       });
   };
 
-  const getRequestTypes = async () => {
+  const getMachineLists = async () => {
     setLoading(true);
     await axios
-      .get(`${baseURL}/allRequestType`, {
+      .get(`${baseURL}/machineLists`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -115,7 +168,7 @@ const MachineComponents: React.FC = () => {
         if (!res.data.err && res.data.status === "Ok") {
           console.log(res.data);
           setLoading(false);
-          setRequestType(res.data.result);
+          setMachineList(res.data.result);
         } else {
           console.log(123);
         }
@@ -125,9 +178,9 @@ const MachineComponents: React.FC = () => {
       });
   };
 
-  const findTypes = (id: number) => {
-    const obj = requestType?.find((x) => x.type_id === id);
-    setObjRequestTypes(obj);
+  const findMachine = (id: number) => {
+    const obj = machineLists?.find((x) => x.site_mcid === id);
+    setObjMachine(obj);
     console.log(obj);
 
     if (obj !== null && obj !== undefined) {
@@ -180,10 +233,10 @@ const MachineComponents: React.FC = () => {
   };
 
   // Function ลบข้อมูล
-  
-  const deleteRequestTypes = (id: number) => {
+
+  const deleteMachine = (id: number) => {
     axios
-      .delete(`${baseURL}/requestType/delete/${id}`, {
+      .delete(`${baseURL}/machine/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -202,7 +255,7 @@ const MachineComponents: React.FC = () => {
             showCancelButton: false,
             showConfirmButton: false,
           }).then(() => {
-            getRequestTypes();
+            getMachineLists();
           });
         }
       })
@@ -213,7 +266,7 @@ const MachineComponents: React.FC = () => {
 
   const columns = [
     {
-      name: "type_id",
+      name: "site_mcid",
       label: "Action",
       options: {
         filter: false,
@@ -234,7 +287,7 @@ const MachineComponents: React.FC = () => {
                     cancelButtonText: "ยกเลิก",
                   }).then((result) => {
                     if (result.isConfirmed) {
-                      deleteRequestTypes(value);
+                      deleteMachine(value);
                     }
                   });
                 }}
@@ -245,7 +298,7 @@ const MachineComponents: React.FC = () => {
             <Tooltip title="แก้ไขข้อมูล">
               <EditRoundedIcon
                 onClick={() => {
-                  findTypes(value);
+                  findMachine(value);
                 }}
                 sx={{ fontSize: 20, color: yellow[700] }}
               />
@@ -255,7 +308,18 @@ const MachineComponents: React.FC = () => {
       },
     },
     {
-      name: "type_name",
+      name: "site_mccode",
+      label: "Code",
+      options: {
+        filter: true,
+        sort: false,
+        customBodyRender: (value: any) => (
+          <BadgeCustom text={value} color="purple" />
+        ),
+      },
+    },
+    {
+      name: "site_mcname",
       label: "Name",
       options: {
         filter: true,
@@ -263,7 +327,31 @@ const MachineComponents: React.FC = () => {
       },
     },
     {
-      name: "type_CreateDate",
+      name: "site_factory",
+      label: "Factory",
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: "name_area",
+      label: "Area",
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: "name_process",
+      label: "Process",
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: "site_mccreatedate",
       label: "Create Date",
       options: {
         filter: true,
@@ -275,7 +363,7 @@ const MachineComponents: React.FC = () => {
       },
     },
     {
-      name: "type_CreateBy",
+      name: "site_mccreateby",
       label: "Create By",
       options: {
         filter: true,
@@ -284,10 +372,9 @@ const MachineComponents: React.FC = () => {
           value !== null ? value : "ไม่ได้ระบุ",
       },
     },
-  
-   
+
     {
-      name: "type_Status",
+      name: "site_status",
       label: "Status",
       options: {
         filter: true,
@@ -307,10 +394,12 @@ const MachineComponents: React.FC = () => {
     setRenderDom((prev) => !prev);
   };
   useEffect(() => {
-    getRequestTypes();
+    getMachineLists();
+    getProcessMaster();
+    getFactoryMaster();
   }, [renderDom]);
   return loading ? (
-    <Box className="flex h-[50vh] items-center justify-center">
+    <Box className="flex h-[50vh] items-center justify-center overflow-hidden">
       <LoadingPage />
     </Box>
   ) : (
@@ -334,13 +423,17 @@ const MachineComponents: React.FC = () => {
           open={open}
           handleClose={handleClose}
           callBackRender={callBackRender}
+          processLists={processMaster}
+          factoryLists={factoryMaster}
         />
         {/*  Modal for Edit machine */}
         <EditMachineModal
           open={openUpdate}
           handleClose={handleCloseUpdate}
           callBackRender={callBackRender}
-          objRequestTypes={objRequestTypes}
+          processLists={processMaster}
+          factoryLists={factoryMaster}
+          oldValue={objMachine}
         />
         <Box className="flex gap-x-2">
           <Button
@@ -352,13 +445,13 @@ const MachineComponents: React.FC = () => {
           >
             <AddRoundedIcon /> Add
           </Button>
-          <ExportExcelFile data={requestType} fileName={`FactoryMaster`} />
+          <ExportExcelFile data={machineLists} fileName={`MachineMaster`} />
         </Box>
         <Box className="mt-1">
           <MUIDataTable
             title={<Typography>Machine Management</Typography>}
             options={options}
-            data={requestType || []}
+            data={machineLists || []}
             columns={columns}
           />
         </Box>
