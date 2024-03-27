@@ -394,7 +394,7 @@ const FormRequestJobs: React.FC = () => {
         </Typography>
 
         {machine?.selectedValue == "" ||
-        machine?.selectedValue === undefined ? (
+         machine?.selectedValue === undefined ? (
           <div className="bg-red-100 text-red-600 font-bold px-3 py-1 flex justify-center w-[10rem] rounded-lg text-[14px]">
             ไม่ได้ระบุเครื่องจักร
           </div>
