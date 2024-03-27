@@ -10,43 +10,36 @@ import axios, { AxiosResponse } from "axios";
 import Swal from "sweetalert2";
 import { usePSDHelpdeskStore } from "../../../../store";
 import LoadingPage from "../../../../components/LoadingPage/LoadingPage";
-import BadgeCustom from "../../../../components/BadgeCustom/BadgeCustom";
 import ExportExcelFile from "../../../../components/ExportExcelFile/ExportExcelFile";
-import AddRequestTypeModal from "./AddRequestTypeModal";
-import EditRequestTypeModal from "./EditRequestTypeModal";
 
 import { motion } from "framer-motion";
+import EditProcessModal from "./EditProcessModal";
+import AddProcessModal from "./AddProcessModal";
+
+export interface optionsProcess {
+  value: string;
+  label: string;
+}
 
 // Interface type Response
+export interface ProcessAll {
+  id_process: number;
+  name_process: string;
+  desc_process:string ;
+  created_at: string;
+  updated_at: string | null;
+  created_by: string | null;
+  updated_by: string | null;
+}
 
-export interface RequestTypesAll {
-  type_id: number;
-  type: number;
-  type_name: string;
-  type_name_en: string;
-  type_description: string;
-  type_remark1: string | null;
-  type_remark2: string | null;
-  type_remark3: string | null;
-  type_UpdateDate: string | null;
-  type_UpdateBy: string | null;
-  _UserID: string | null;
-  _DateEdit: string | null;
-  _Remark: string | null;
-  CG_ID: string | null;
-  type_Status: string;
-  type_CreateDate: string | null;
-  type_CreateBy: string | null;
-} 
-
-const RequestTypeComponents: React.FC = () => {
+const ProcessComponents: React.FC = () => {
   const baseURL = import.meta.env.VITE_NODE_SERVER;
   const [loading, setLoading] = useState<boolean>(true);
   const token = usePSDHelpdeskStore((state) => state.token);
-  const [requestType, setRequestType] = useState<RequestTypesAll[]>();
+  const [processLists, setProcessList] = useState<ProcessAll[]>();
   const [open, setOpen] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
-  const [objRequestTypes, setObjRequestTypes] = useState<RequestTypesAll>();
+  const [objProcess, setObjProcess] = useState<ProcessAll>();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -54,7 +47,6 @@ const RequestTypeComponents: React.FC = () => {
   const handleCloseUpdate = () => setOpenUpdate(false);
 
   const [renderDom, setRenderDom] = useState<boolean>(false);
-
   // Function Remove Multiple row
   const handleDelete = async (
     indexOf: { index: number; dataIndex: number }[]
@@ -62,16 +54,15 @@ const RequestTypeComponents: React.FC = () => {
     console.log(indexOf);
     let newArray: any = [];
     for (let i = 0; i < indexOf.length; i++) {
-      if (requestType !== undefined) {
-        newArray.push(requestType[indexOf[i].dataIndex]);
+      if (processLists !== undefined) {
+        newArray.push(processLists[indexOf[i].dataIndex]);
       }
     }
-    
     axios
       .post(
-        `${baseURL}/requestType/delete/multiple`,
+        `${baseURL}/process/delete/multiple`,
         {
-          id: newArray?.map((val: any) => val.type_id),
+          id: newArray?.map((val: any) => val.id_process),
         },
         {
           headers: {
@@ -93,7 +84,7 @@ const RequestTypeComponents: React.FC = () => {
             showCancelButton: false,
             showConfirmButton: false,
           }).then(() => {
-            getRequestTypes();
+            getProcessLists();
           });
         }
       })
@@ -102,10 +93,10 @@ const RequestTypeComponents: React.FC = () => {
       });
   };
 
-  const getRequestTypes = async () => {
+  const getProcessLists = async () => {
     setLoading(true);
     await axios
-      .get(`${baseURL}/allRequestType`, {
+      .get(`${baseURL}/process`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -114,7 +105,7 @@ const RequestTypeComponents: React.FC = () => {
         if (!res.data.err && res.data.status === "Ok") {
           console.log(res.data);
           setLoading(false);
-          setRequestType(res.data.result);
+          setProcessList(res.data.result);
         } else {
           console.log(123);
         }
@@ -124,9 +115,9 @@ const RequestTypeComponents: React.FC = () => {
       });
   };
 
-  const findTypes = (id: number) => {
-    const obj = requestType?.find((x) => x.type_id === id);
-    setObjRequestTypes(obj);
+  const findProcess = (id: number) => {
+    const obj = processLists?.find((x) => x.id_process === id);
+    setObjProcess(obj);
     console.log(obj);
 
     if (obj !== null && obj !== undefined) {
@@ -179,10 +170,10 @@ const RequestTypeComponents: React.FC = () => {
   };
 
   // Function ลบข้อมูล
-  
-  const deleteRequestTypes = (id: number) => {
+
+  const deleteProcess = (id: number) => {
     axios
-      .delete(`${baseURL}/requestType/delete/${id}`, {
+      .delete(`${baseURL}/process/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -201,7 +192,7 @@ const RequestTypeComponents: React.FC = () => {
             showCancelButton: false,
             showConfirmButton: false,
           }).then(() => {
-            getRequestTypes();
+            getProcessLists();
           });
         }
       })
@@ -212,7 +203,7 @@ const RequestTypeComponents: React.FC = () => {
 
   const columns = [
     {
-      name: "type_id",
+      name: "id_process",
       label: "Action",
       options: {
         filter: false,
@@ -233,7 +224,7 @@ const RequestTypeComponents: React.FC = () => {
                     cancelButtonText: "ยกเลิก",
                   }).then((result) => {
                     if (result.isConfirmed) {
-                      deleteRequestTypes(value);
+                      deleteProcess(value);
                     }
                   });
                 }}
@@ -244,7 +235,7 @@ const RequestTypeComponents: React.FC = () => {
             <Tooltip title="แก้ไขข้อมูล">
               <EditRoundedIcon
                 onClick={() => {
-                  findTypes(value);
+                  findProcess(value);
                 }}
                 sx={{ fontSize: 20, color: yellow[700] }}
               />
@@ -253,8 +244,9 @@ const RequestTypeComponents: React.FC = () => {
         ),
       },
     },
+
     {
-      name: "type_name",
+      name: "name_process",
       label: "Name",
       options: {
         filter: true,
@@ -262,7 +254,7 @@ const RequestTypeComponents: React.FC = () => {
       },
     },
     {
-      name: "type_CreateDate",
+      name: "created_at",
       label: "Create Date",
       options: {
         filter: true,
@@ -274,29 +266,13 @@ const RequestTypeComponents: React.FC = () => {
       },
     },
     {
-      name: "type_CreateBy",
+      name: "created_by",
       label: "Create By",
       options: {
         filter: true,
         sort: false,
         customBodyRender: (value: any) =>
           value !== null ? value : "ไม่ได้ระบุ",
-      },
-    },
-  
-   
-    {
-      name: "type_Status",
-      label: "Status",
-      options: {
-        filter: true,
-        sort: false,
-        customBodyRender: (value: any) => (
-          <BadgeCustom
-            text={value}
-            color={value == "ENABLE" ? "success" : "danger"}
-          />
-        ),
       },
     },
   ];
@@ -306,10 +282,10 @@ const RequestTypeComponents: React.FC = () => {
     setRenderDom((prev) => !prev);
   };
   useEffect(() => {
-    getRequestTypes();
+    getProcessLists();
   }, [renderDom]);
   return loading ? (
-    <Box className="flex h-[50vh] items-center justify-center">
+    <Box className="flex h-[50vh] items-center justify-center overflow-hidden">
       <LoadingPage />
     </Box>
   ) : (
@@ -328,18 +304,18 @@ const RequestTypeComponents: React.FC = () => {
       }}
     >
       <Box>
-        {/* Modal for add RequestType */}
-        <AddRequestTypeModal
+        {/* Modal for add process */}
+        <AddProcessModal
           open={open}
           handleClose={handleClose}
           callBackRender={callBackRender}
         />
-        {/*  Modal for Edit RequestType */}
-        <EditRequestTypeModal
+        {/*  Modal for Edit process */}
+        <EditProcessModal
           open={openUpdate}
           handleClose={handleCloseUpdate}
           callBackRender={callBackRender}
-          objRequestTypes={objRequestTypes}
+          oldValue={objProcess}
         />
         <Box className="flex gap-x-2">
           <Button
@@ -351,13 +327,13 @@ const RequestTypeComponents: React.FC = () => {
           >
             <AddRoundedIcon /> Add
           </Button>
-          <ExportExcelFile data={requestType} fileName={`RequestTypeMaster`} />
+          <ExportExcelFile data={processLists} fileName={`ProcessMaster`} />
         </Box>
         <Box className="mt-1">
           <MUIDataTable
-            title={<Typography>Request Types Management</Typography>}
+            title={<Typography>Process Management</Typography>}
             options={options}
-            data={requestType || []}
+            data={processLists || []}
             columns={columns}
           />
         </Box>
@@ -366,4 +342,4 @@ const RequestTypeComponents: React.FC = () => {
   );
 };
 
-export default RequestTypeComponents;
+export default ProcessComponents;
